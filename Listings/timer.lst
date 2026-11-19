@@ -1,0 +1,127 @@
+C251 COMPILER V5.60.0,  timer                                                              29/10/22  14:59:57  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE timer
+OBJECT MODULE PLACED IN .\Objects\timer.obj
+COMPILER INVOKED BY: C:\Keil_v5\C251\BIN\C251.EXE HARDWARE\src\timer.c XSMALL INTR2 BROWSE INCDIR(.\HARDWARE\inc) DEBUG 
+                    -PRINT(.\Listings\timer.lst) TABS(2) OBJECT(.\Objects\timer.obj) 
+
+stmt  level    source
+
+    1          #include "timer.h"    
+    2          #include "motor.h" 
+    3          /*--------------------------------------------------------------*/
+    4          /* --- -----------------实验内容 -------------------------------*/
+    5          /* --- 1-了解STC-ISP工具生产延时函数方法 -----------------------*/
+    6          /* --- 2-掌握子函数的创建与调用---------------------------------*/
+    7          /* --- 实验平台：未来电子STC32核心板----------------------------*/
+    8          /* --- 视频学习：https://space.bilibili.com/494969171 ----------*/
+    9          /* --- QQ交流群：702805632 -------------------------------------*/
+   10          /* --- 参考资料：STC32实验室参考例程 ---------------------------*/
+   11          /*--------------------------------------------------------------*/ 
+   12          
+   13          uint16 Time_Count = 0; 
+   14          uint8 Time_Count_pwm = 0; 
+   15          uint8 PWM_Count = 50; //占空比
+   16          
+   17          /***********************************************************
+   18          功能描述：定时器4初始化  1MS
+   19          入口参数：无
+   20          返回值：无
+   21          ************************************************************/
+   22          void Timer4Init(void)
+   23          {
+   24   1        T4T3M &= 0xBF;                  //定时器4设置为定时方式
+   25   1        T4T3M |= 0x20;                  //设置定时器4为1T模式
+   26   1        T4L = 0x90;                     //1T模式下初始装载值 
+   27   1        T4H = 0xE8;                     //1T模式下初始装载值 
+   28   1        IE2  |=  (1<<6);                //使能定时器4中断
+   29   1        T4T3M |= 0x80;                  //打开定时器4
+   30   1      } 
+   31          /***********************************************************
+   32          功能描述：定时器4中断服务程序
+   33          入口参数：无
+   34          返回值：无       250us进入1次中断 
+   35          ************************************************************/
+   36          void timer4_int (void) interrupt 20
+   37          {
+   38   1        if(++Time_Count>=4000) //最长计时间 
+   39   1        {
+   40   2           Time_Count=0;
+   41   2        }  
+   42   1        if(++Time_Count_pwm>100)
+   43   1         {
+   44   2            Time_Count_pwm=0;
+   45   2         } 
+   46   1         if(Time_Count_pwm>=PWM_Count)//PWM调速
+   47   1         {
+   48   2            Car_Stop(); //置为低电平     
+   49   2         }else{    
+   50   2      
+   51   2           Adjust_Pwm_data(); //置为高电平
+   52   2         } 
+   53   1      } 
+   54          
+   55          /*********************************END FILE********************************************/ 
+   56          
+   57          
+   58          
+C251 COMPILER V5.60.0,  timer                                                              29/10/22  14:59:57  PAGE 2   
+
+   59          
+   60          
+   61          
+   62          
+   63          
+   64          
+   65          
+   66          
+   67          
+   68          
+   69          
+   70          
+   71          
+   72          
+   73          
+   74          
+   75          
+   76          
+   77          
+   78          
+   79          
+   80          
+   81          
+   82          
+   83          
+   84          
+   85          
+   86          
+   87          
+   88          
+   89          
+   90          
+   91          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       126     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =         4     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        16     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

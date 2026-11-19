@@ -1,0 +1,268 @@
+C251 COMPILER V5.60.0,  motor                                                              29/10/22  15:03:36  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE motor
+OBJECT MODULE PLACED IN .\Objects\motor.obj
+COMPILER INVOKED BY: C:\Keil_v5\C251\BIN\C251.EXE HARDWARE\src\motor.c XSMALL INTR2 BROWSE INCDIR(.\HARDWARE\inc) DEBUG 
+                    -PRINT(.\Listings\motor.lst) TABS(2) OBJECT(.\Objects\motor.obj) 
+
+stmt  level    source
+
+    1          #include "motor.h" 
+    2          #include "delay.h"  
+    3          #include "timer.h"    
+    4          
+    5          uint8 Car_State_number = 0; //小车状态值 
+    6          
+    7          /***************************电机端口定义*************************************/
+    8          sbit LH_B=P2^0;
+    9          sbit LH_F=P2^1; 
+   10          
+   11          sbit RH_F=P2^2;
+   12          sbit RH_B=P2^3;
+   13          
+   14          sbit RQ_F=P1^4;
+   15          sbit RQ_B=P1^5;
+   16          
+   17          sbit LQ_F=P1^6;
+   18          sbit LQ_B=P1^7;  
+   19          
+   20          //========================================================================
+   21          // 函数: void Motor_Init_Port(void)
+   22          // 描述: 延时函数。
+   23          // 参数: 初始化电机端口
+   24          // 返回: none.
+   25          // 版本: VER1.0
+   26          // 日期: 2022-9-24
+   27          // 备注: 
+   28          //======================================================================== 
+   29          void Motor_Init_Port(void)
+   30          {
+   31   1          P2M0 = 0x0F;        
+   32   1          P2M1 = 0x00;  
+   33   1        
+   34   1          P1M0 = 0xF0;        
+   35   1          P1M1 = 0x00;   
+   36   1        
+   37   1          delay_ms(50); //等待稳定
+   38   1      }
+   39          //========================================================================
+   40          // 函数: void Car_Forword(void)
+   41          // 描述: 前进
+   42          // 参数:  pwm_perent 占空比百分比
+   43          // 返回: none.
+   44          // 版本: VER1.0
+   45          // 日期: 2022-9-24
+   46          // 备注: 
+   47          //========================================================================  
+   48          void Car_Forword(uint8 pwm_perent)//前进
+   49          {  
+   50   1        PWM_Count = pwm_perent;
+   51   1      
+   52   1        LH_B=0;  
+   53   1        LH_F=1;
+   54   1        
+   55   1        RH_F=1;  
+   56   1        RH_B=0;
+   57   1        
+   58   1        RQ_F=0;
+C251 COMPILER V5.60.0,  motor                                                              29/10/22  15:03:36  PAGE 2   
+
+   59   1        RQ_B=1;
+   60   1        
+   61   1        LQ_F=0;
+   62   1        LQ_B=1; 
+   63   1        
+   64   1      }
+   65          //========================================================================
+   66          // 函数: void Car_Back(void)
+   67          // 描述: 后退
+   68          // 参数: pwm_perent 占空比百分比
+   69          // 返回: none.
+   70          // 版本: VER1.0
+   71          // 日期: 2022-9-24
+   72          // 备注: 
+   73          //========================================================================  
+   74          void Car_Back(uint8 pwm_perent)//后退
+   75          { 
+   76   1       PWM_Count = pwm_perent; 
+   77   1        
+   78   1      
+   79   1        LH_B=1;  
+   80   1        LH_F=0;
+   81   1        
+   82   1        RH_F=0;  
+   83   1        RH_B=1;
+   84   1        
+   85   1        RQ_F=1;
+   86   1        RQ_B=0;
+   87   1        
+   88   1        LQ_F=1;
+   89   1        LQ_B=0; 
+   90   1        
+   91   1      }
+   92          //========================================================================
+   93          // 函数: void Car_Turn_Left(void)
+   94          // 描述: 左转
+   95          // 参数: pwm_perent 占空比百分比
+   96          // 返回: none.
+   97          // 版本: VER1.0
+   98          // 日期: 2022-9-24
+   99          // 备注: 
+  100          //========================================================================  
+  101          void Car_Turn_Left(uint8 pwm_perent)//左转
+  102          {
+  103   1        PWM_Count = pwm_perent;  
+  104   1        
+  105   1        LH_B=1;  
+  106   1        LH_F=0; 
+  107   1        
+  108   1        LQ_F=1;
+  109   1        LQ_B=0;  
+  110   1        
+  111   1        RH_F=1;  
+  112   1        RH_B=0;
+  113   1        
+  114   1        RQ_F=0;
+  115   1        RQ_B=1;
+  116   1        
+  117   1      }
+  118          //========================================================================
+  119          // 函数: void Car_Turn_Right(void)
+  120          // 描述: 右转
+  121          // 参数: pwm_perent 占空比百分比
+  122          // 返回: none.
+  123          // 版本: VER1.0
+  124          // 日期: 2022-9-24
+C251 COMPILER V5.60.0,  motor                                                              29/10/22  15:03:36  PAGE 3   
+
+  125          // 备注: 
+  126          //========================================================================  
+  127          void Car_Turn_Right(uint8 pwm_perent)//右转
+  128          {
+  129   1        PWM_Count = pwm_perent; 
+  130   1        
+  131   1        LQ_F=0;
+  132   1        LQ_B=1; 
+  133   1        
+  134   1        LH_B=0;  
+  135   1        LH_F=1;
+  136   1        
+  137   1        RH_F=0;  
+  138   1        RH_B=1;
+  139   1        
+  140   1        RQ_F=1;
+  141   1        RQ_B=0;
+  142   1      
+  143   1      }
+  144          //========================================================================
+  145          // 函数: void Car_Stop(void)
+  146          // 描述: 右转
+  147          // 参数: pwm_perent 占空比百分比
+  148          // 返回: none.
+  149          // 版本: VER1.0
+  150          // 日期: 2022-9-24
+  151          // 备注: 
+  152          //========================================================================  
+  153          void Car_Stop(void)//停止
+  154          {   
+  155   1        LH_B=0;  
+  156   1        LH_F=0;
+  157   1        
+  158   1        RH_F=0;  
+  159   1        RH_B=0;
+  160   1        
+  161   1        RQ_F=0;
+  162   1        RQ_B=0;
+  163   1        
+  164   1        LQ_F=0;
+  165   1        LQ_B=0;
+  166   1      }
+  167          //========================================================================
+  168          // 函数: void Calculation_Data(void)
+  169          // 描述: 根据状态数值去进行PWM调节
+  170          // 参数:
+  171          // 返回: Count_State_number  1  前进   
+  172          // 返回: Count_State_number  2  后退   
+  173          // 返回: Count_State_number  3  左转   
+  174          // 返回: Count_State_number  4  右转  
+  175          // 返回: Count_State_number  5  停止 
+  176          // 版本: VER1.0
+  177          // 日期: 2022-9-24
+  178          // 备注: 
+  179          //========================================================================  
+  180          void Adjust_Pwm_data(void)
+  181          {
+  182   1          switch(Car_State_number)
+  183   1          {
+  184   2            case 1:  Car_Forword(PWM_Count);break;
+  185   2            case 2:  Car_Back(PWM_Count);break;
+  186   2            case 3:  Car_Turn_Left(PWM_Count);break;
+  187   2            case 4:  Car_Turn_Right(PWM_Count);break;
+  188   2            case 5:  Car_Stop();break;
+  189   2            default :Car_Stop(); break;
+  190   2          } 
+C251 COMPILER V5.60.0,  motor                                                              29/10/22  15:03:36  PAGE 4   
+
+  191   1      }
+  192          
+  193          
+  194          
+  195          
+  196          
+  197          
+  198          
+  199          
+  200          
+  201          
+  202          
+  203          
+  204          
+  205          
+  206          
+  207          
+  208          
+  209          
+  210          
+  211          
+  212          
+  213          
+  214          
+  215          
+  216          
+  217          
+  218          
+  219          
+  220          
+  221          
+  222          
+  223          
+  224          
+  225          
+  226          
+  227          
+  228          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       174     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =         1     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =         5     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
