@@ -1,0 +1,119 @@
+C251 COMPILER V5.60.0,  hw                                                                 19/02/25  21:35:31  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE hw
+OBJECT MODULE PLACED IN .\Objects\hw.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE HARDWARE\src\hw.c INTR2 BROWSE DEBUG PRINT(.\Listings\hw.lst) TABS(2) 
+                    -OBJECT(.\Objects\hw.obj) 
+
+stmt  level    source
+
+    1          #include "hw.h"  
+*** ERROR C318 IN LINE 1 OF HARDWARE\src\hw.c: can't open file 'hw.h'
+    2          #include "motor.h" 
+*** ERROR C318 IN LINE 2 OF HARDWARE\src\hw.c: can't open file 'motor.h'
+    3          
+    4          uint8 Car_State_number = 0; //小车状态值
+*** ERROR C142 IN LINE 4 OF HARDWARE\src\hw.c: illegal initialization
+    5          //========================================================================
+    6          // 函数: void Motor_Init_Port(void)
+    7          // 描述: 初始化红外端口
+    8          // 参数: 
+    9          // 返回: none.
+   10          // 版本: VER1.0
+   11          // 日期: 2022-9-24
+   12          // 备注: 
+   13          //======================================================================== 
+   14          void HW_Init_Port(void)
+   15          {
+*** ERROR C42 IN LINE 15 OF HARDWARE\src\hw.c: 'HW_Init_Port': not in formal parameter list
+*** ERROR C25 IN LINE 15 OF HARDWARE\src\hw.c: syntax error near '{'
+   16            
+   17              P0M0 = 0x00;        
+   18              P0M0 = 0x00;  //0100 0000 P0.6高阻输入
+   19          
+   20            
+   21              P4M0 = 0x00;        
+   22              P4M1 = 0x00;  //1000 0000 P4.7高阻输入
+   23            
+   24            
+   25              P3M0 = 0x00;        
+   26              P3M0 = 0x00;   //0000 1100 P3.2/3.3高阻输入
+   27          
+   28            Get_HW_MR=1;
+   29            Get_HW_ML=1;
+   30            Get_HW_R=1;
+   31            Get_HW_L=1 ;
+   32                    
+   33                  
+   34          }
+   35          //========================================================================
+   36          // 函数: void Calculation_Data(void)
+   37          // 描述: 根据状态数值去进行PWM调节
+   38          // 参数:
+   39          // 返回: Count_State_number  1  前进    
+   40          // 返回: Count_State_number  2  左转   
+   41          // 返回: Count_State_number  3  右转  
+   42          // 版本: VER1.0
+   43          // 日期: 2022-9-24
+   44          // 备注: 
+   45          //========================================================================  
+   46          void Adjust_Pwm_data(void)
+   47          {
+   48              switch(Car_State_number)
+   49              {
+   50                case 1:  Car_Forword(15);break;
+   51                case 2:  Car_Forword(5);break;
+   52                
+   53                case 3:  Car_Turn_Left(50);break;
+C251 COMPILER V5.60.0,  hw                                                                 19/02/25  21:35:31  PAGE 2   
+
+   54                case 4:  Car_Turn_Left(80);break;
+   55                
+   56                case 5:  Car_Turn_Right(50);break; 
+   57                case 6:  Car_Turn_Right(80);break; 
+   58              
+   59                case 7:  Car_Stop();break;
+   60                case 8:  Car_Turn_Right1(85);break; 
+   61                
+   62                default :Car_Stop(); break;
+   63              } 
+   64          }
+   65          
+   66          
+   67          
+   68          
+   69          
+   70          
+   71          
+   72          
+   73          
+   74          
+   75          
+   76          
+   77          
+   78          
+   79          
+   80          
+   81          
+   82          
+   83          
+   84          
+   85          
+   86          
+   87          
+   88          
+   89          
+   90          
+   91          
+   92          
+   93          
+   94          
+   95          
+   96          
+   97          
+   98          
+   99          
+*** ERROR C7 IN LINE 99 OF HARDWARE\src\hw.c: compilation aborted
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  6 ERROR(S)

@@ -1,0 +1,44 @@
+C251 COMPILER V5.60.0,  main (4)                                                           19/02/25  21:35:29  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main (4)
+OBJECT MODULE PLACED IN .\Objects\main (4).obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE main (4).c INTR2 BROWSE DEBUG PRINT(.\Listings\main (4).lst) TABS(2) O
+                    -BJECT(.\Objects\main (4).obj) 
+
+stmt  level    source
+
+    1          #include <STC32G.H>
+    2          #include "intrins.h"
+    3          #include "delay.h"  
+*** ERROR C318 IN LINE 3 OF main (4).c: can't open file 'delay.h'
+    4          #include "BEEP.h"   
+*** ERROR C318 IN LINE 4 OF main (4).c: can't open file 'BEEP.h'
+    5          
+    6          /********************* 主函数 *************************/
+    7          void main(void)
+    8          { 
+    9   1        
+   10   1        WTST = 0;  //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+   11   1        EAXFR = 1; //扩展寄存器(XFR)访问使能
+   12   1        CKCON = 0; //提高访问XRAM速度
+   13   1      
+   14   1        P3M0 = 0x40;         //将P3.6口单独设置为推挽输出模式  0100 0000
+   15   1        P3M1 = 0x00;  
+   16   1        
+   17   1        Timer0Init(); //定时器初始化
+*** WARNING C140 IN LINE 17 OF main (4).c: 'Timer0Init' undefined; assuming 'extern int Timer0Init()'
+   18   1        
+   19   1        while (1)
+   20   1        { 
+   21   2          
+   22   2         Play_Music_Happy_Brithday(); //播放音乐
+*** WARNING C140 IN LINE 22 OF main (4).c: 'Play_Music_Happy_Brithday' undefined; assuming 'extern int Play_Music_Happy_
+             -Brithday()'
+   23   2          
+   24   2        }
+   25   1      }
+   26          
+   27          
+
+C251 COMPILATION COMPLETE.  2 WARNING(S),  2 ERROR(S)

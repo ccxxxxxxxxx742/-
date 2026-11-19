@@ -1,0 +1,45 @@
+C251 COMPILER V5.60.0,  main (5)                                                           19/02/25  21:35:30  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main (5)
+OBJECT MODULE PLACED IN .\Objects\main (5).obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE main (5).c INTR2 BROWSE DEBUG PRINT(.\Listings\main (5).lst) TABS(2) O
+                    -BJECT(.\Objects\main (5).obj) 
+
+stmt  level    source
+
+    1          #include <STC32G.H>
+    2          #include "intrins.h" 
+    3          #include "delay.h"  
+*** ERROR C318 IN LINE 3 OF main (5).c: can't open file 'delay.h'
+    4          #include "uart1.h" 
+*** ERROR C318 IN LINE 4 OF main (5).c: can't open file 'uart1.h'
+    5          #include "adc.h" 
+*** ERROR C318 IN LINE 5 OF main (5).c: can't open file 'adc.h'
+    6          /********************* 主函数 *************************/
+    7          void main()
+    8          { 
+    9   1        
+   10   1        WTST = 0;  //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+   11   1        EAXFR = 1; //扩展寄存器(XFR)访问使能
+   12   1        CKCON = 0; //提高访问XRAM速度
+   13   1       
+   14   1        Uart1_Init(); //串口初始化 
+*** WARNING C140 IN LINE 14 OF main (5).c: 'Uart1_Init' undefined; assuming 'extern int Uart1_Init()'
+   15   1        
+   16   1        ADC_Init_Port(); //ADC初始化
+*** WARNING C140 IN LINE 16 OF main (5).c: 'ADC_Init_Port' undefined; assuming 'extern int ADC_Init_Port()'
+   17   1        
+   18   1        PrintString1("ADC Test!\r\n");  //UART1发送一个字符串 
+*** WARNING C140 IN LINE 18 OF main (5).c: 'PrintString1' undefined; assuming 'extern int PrintString1()'
+*** WARNING C95 IN LINE 18 OF main (5).c: 'PrintString1': too many actual parameters
+   19   1        
+   20   1        while (1)
+   21   1        {
+   22   2          User_Get_ADC_data(); //获取ADC
+*** WARNING C140 IN LINE 22 OF main (5).c: 'User_Get_ADC_data' undefined; assuming 'extern int User_Get_ADC_data()'
+   23   2        } 
+   24   1      } 
+   25          
+
+C251 COMPILATION COMPLETE.  5 WARNING(S),  3 ERROR(S)

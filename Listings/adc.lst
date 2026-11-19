@@ -1,0 +1,161 @@
+C251 COMPILER V5.60.0,  adc                                                                19/02/25  21:35:30  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE adc
+OBJECT MODULE PLACED IN .\Objects\adc.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE HARDWARE\src\adc.c INTR2 BROWSE DEBUG PRINT(.\Listings\adc.lst) TABS(2
+                    -) OBJECT(.\Objects\adc.obj) 
+
+stmt  level    source
+
+    1          #include "adc.h"  
+*** ERROR C318 IN LINE 1 OF HARDWARE\src\adc.c: can't open file 'adc.h'
+    2          #include "uart1.h" 
+*** ERROR C318 IN LINE 2 OF HARDWARE\src\adc.c: can't open file 'uart1.h'
+    3          #include "delay.h" 
+*** ERROR C318 IN LINE 3 OF HARDWARE\src\adc.c: can't open file 'delay.h'
+    4          #include "stdio.h" 
+    5          #include <stdio.h>
+    6          int BGV,BGP,VCC;
+    7          
+    8           /**************************************************************************
+    9          功能描述：ADC口初始化
+   10          入口参数：无
+   11          返回值：无
+   12           *************************************************************************/
+   13          void  ADC_config(void)
+   14          { 
+   15   1        P_SW2 |= 0x80;          //将EAXFR位置1，以访问在XDATA区域的扩展SFR
+*** ERROR C67 IN LINE 15 OF HARDWARE\src\adc.c: 'P_SW2': undefined identifier
+   16   1        ADCTIM = 0x3f;          //设置ADC内部时序，ADC采样时间建议设最大值
+*** ERROR C67 IN LINE 16 OF HARDWARE\src\adc.c: 'ADCTIM': undefined identifier
+   17   1        P_SW2 &= 0x7F;          //将EAXFR位置0，恢复访问XRAM  
+*** ERROR C67 IN LINE 17 OF HARDWARE\src\adc.c: 'P_SW2': undefined identifier
+   18   1      
+   19   1        ADCCFG|=0x20;           //ADC转换结果ADC_RES存高4位，ADC_RESL存低8位
+*** ERROR C67 IN LINE 19 OF HARDWARE\src\adc.c: 'ADCCFG': undefined identifier
+   20   1        ADCCFG|=0x0F;           //设置ADC时钟为系统时钟/2/16/16
+*** ERROR C67 IN LINE 20 OF HARDWARE\src\adc.c: 'ADCCFG': undefined identifier
+   21   1      
+   22   1        ADC_CONTR&=0xDF;        //清AD转换完成标志
+*** ERROR C67 IN LINE 22 OF HARDWARE\src\adc.c: 'ADC_CONTR': undefined identifier
+   23   1        ADC_CONTR|=0x80;        //开AD转换电源
+*** ERROR C67 IN LINE 23 OF HARDWARE\src\adc.c: 'ADC_CONTR': undefined identifier
+   24   1        
+   25   1      }
+   26          /**************************************
+   27          功能描述：ADC口检测AD转换值函数
+   28          入口参数：无
+   29          返回值：ADC 12位数据
+   30          ***************************************/
+   31          uint16  Get_ADC12bitResult(uint8 channel) 
+*** ERROR C25 IN LINE 31 OF HARDWARE\src\adc.c: syntax error near 'channel'
+   32          {
+*** ERROR C42 IN LINE 32 OF HARDWARE\src\adc.c: 'Get_ADC12bitResult': not in formal parameter list
+   33              ADC_RES = 0;        //将ADC转换结果高位寄存器ADC_RES清空
+   34              ADC_RESL = 0;       //将ADC转换结果低位寄存器ADC_RESL清空
+   35          
+   36              ADC_CONTR = (ADC_CONTR & 0xF0) | 0x40 | channel;  //启动AD转换并选择通道
+   37              _nop_();
+   38              _nop_();
+   39              _nop_();
+   40              _nop_();  
+   41              while((ADC_CONTR & 0x20) == 0) ;   //等待AD转换完成
+   42              ADC_CONTR &=0xDF;                    //清AD转换完成标志
+   43              return  (((uint16)ADC_RES << 8) | ADC_RESL);
+   44            
+   45          }/**************************************
+   46          功能描述：初始化要获取的ADC端口
+C251 COMPILER V5.60.0,  adc                                                                19/02/25  21:35:30  PAGE 2   
+
+   47          入口参数：无              P01------------------------ADC9
+   48          返回值：ADC 12位数据      读内部基准电压             ADC15           - 
+   49          ***************************************/
+   50          void ADC_Init_Port(void)
+   51          {                                              
+   52            
+   53            P0M0 = 0x00;                    //设置P0.1为高阻输入  0000 0010 
+   54            P0M1 = 0x02;  
+   55            
+   56            
+   57            ADC_config();
+   58          }
+   59           /**************************************************************************
+   60          功能描述：获取ADC值，并且打印出来  0000 0111  0000 0111
+   61          入口参数：无
+   62          返回值：无 1236   // 0000 0111
+   63           *************************************************************************/ 
+   64          
+   65          void User_Get_ADC_data(void)
+   66          {  
+   67               uint16 ADCdata=0 ; 
+   68            
+   69               float g_voltage=0; 
+   70            
+   71               ADCdata = Get_ADC12bitResult(9);     //读外部电压ADC   
+   72            
+   73               //2V5为ADC基准电压,所以计算电压值公式：V=Temp_signal/4096*2.5 //   
+   74              
+   75               if(ADCdata>=4096)//超量程
+   76               {
+   77                 ADCdata=4096;
+   78               }
+   79             
+   80               g_voltage=((2.5*ADCdata)/4096)*1000;  //扩大1000倍，mv打印
+*** WARNING C34 IN LINE 80 OF HARDWARE\src\adc.c: 'ADCdata': missing declaration specifiers
+*** ERROR C42 IN LINE 80 OF HARDWARE\src\adc.c: 'ADCdata': not in formal parameter list
+   81               
+   82               g_voltage=g_voltage*3; //电阻分压了
+   83            
+   84               Uart_Send_ADC_data(g_voltage); 
+   85            
+   86               delay_ms(200); 
+   87          }  
+   88           /**************************************************************************
+   89          功能描述：串口打印数据
+   90          入口参数：无
+   91          返回值：无 1236
+   92           *************************************************************************/ 
+   93          void Uart_Send_ADC_data(uint16 ADC_DATA)
+   94          {  
+   95              unsigned char temp=0,temp1=0,temp2=0,temp3=0;
+   96            
+   97                 temp=(ADC_DATA/1000)+'0'; 
+   98                 temp1=(ADC_DATA/100%10)+'0'; 
+   99                 temp2=(ADC_DATA/10%10)+'0';
+  100                 temp3=(ADC_DATA%10)+'0';
+  101            
+  102                 PrintString1("ADC :"); //
+  103                 SendDataByUart1(temp);
+  104                 SendDataByUart1(temp1 );
+  105                 SendDataByUart1(temp2);
+  106                 SendDataByUart1(temp3);    
+  107                 PrintString1(" mV\r\n");   
+  108          }
+  109          /*********************************END FILE********************************************/ 
+  110          
+C251 COMPILER V5.60.0,  adc                                                                19/02/25  21:35:30  PAGE 3   
+
+  111          
+  112          
+  113          
+  114          
+  115          
+  116          
+  117          
+  118          
+  119          
+  120          
+  121          
+  122          
+  123          
+  124          
+  125          
+  126          
+  127          
+  128          
+  129          
+  130          
+*** ERROR C7 IN LINE 130 OF HARDWARE\src\adc.c: compilation aborted
+
+C251 COMPILATION COMPLETE.  1 WARNING(S),  14 ERROR(S)

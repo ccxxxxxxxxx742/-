@@ -1,0 +1,78 @@
+C251 COMPILER V5.60.0,  Bluetooth                                                          19/02/25  21:35:30  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE Bluetooth
+OBJECT MODULE PLACED IN .\Objects\Bluetooth.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE HARDWARE\src\Bluetooth.c INTR2 BROWSE DEBUG PRINT(.\Listings\Bluetooth
+                    -.lst) TABS(2) OBJECT(.\Objects\Bluetooth.obj) 
+
+stmt  level    source
+
+    1          #include "Bluetooth.h" 
+*** ERROR C318 IN LINE 1 OF HARDWARE\src\Bluetooth.c: can't open file 'Bluetooth.h'
+    2          #include "motor.h" 
+*** ERROR C318 IN LINE 2 OF HARDWARE\src\Bluetooth.c: can't open file 'motor.h'
+    3          uint8 Car_State_number = 0; //小车状态值 ,蓝牙发送数据获取
+*** ERROR C142 IN LINE 3 OF HARDWARE\src\Bluetooth.c: illegal initialization
+    4          
+    5          //========================================================================
+    6          // 函数: void Calculation_Data(void)
+    7          // 描述: 根据状态数值去进行PWM调节
+    8          // 参数:
+    9          // 返回: Count_State_number  1  前进   
+   10          // 返回: Count_State_number  2  后退   
+   11          // 返回: Count_State_number  3  左转   
+   12          // 返回: Count_State_number  4  右转  
+   13          // 返回: Count_State_number  5  停止 
+   14          // 版本: VER1.0
+   15          // 日期: 2022-9-24
+   16          // 备注: 
+   17          //========================================================================  
+   18          void Adjust_Pwm_data(void)
+   19          {
+*** ERROR C42 IN LINE 19 OF HARDWARE\src\Bluetooth.c: 'Adjust_Pwm_data': not in formal parameter list
+*** ERROR C25 IN LINE 19 OF HARDWARE\src\Bluetooth.c: syntax error near '{'
+   20              switch(Car_State_number)
+   21              {
+   22                case 1:  Car_Forword(PWM_Count);break;
+   23                case 2:  Car_Back(PWM_Count);break;
+   24                case 3:  Car_Turn_Left(PWM_Count);break;
+   25                case 4:  Car_Turn_Right(PWM_Count);break;
+   26                case 5:  Car_Stop();break;
+   27                default :Car_Stop(); break;
+   28              } 
+   29          }
+   30          
+   31          
+   32          
+   33          
+   34          
+   35          
+   36          
+   37          
+   38          
+   39          
+   40          
+   41          
+   42          
+   43          
+   44          
+   45          
+   46          
+   47          
+   48          
+   49          
+   50          
+   51          
+   52          
+   53          
+C251 COMPILER V5.60.0,  Bluetooth                                                          19/02/25  21:35:30  PAGE 2   
+
+   54          
+   55          
+   56          
+   57          
+   58          
+*** ERROR C7 IN LINE 58 OF HARDWARE\src\Bluetooth.c: compilation aborted
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  6 ERROR(S)
